@@ -1,0 +1,66 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model categoria {
+  idcategoria Int           @id @default(autoincrement())
+  descripcion String?       @db.VarChar(100)
+  estado      String?       @default("0") @db.Char(1)
+  publicacion publicacion[]
+}
+
+model publicacion {
+  idpublicacion       Int               @id @default(autoincrement())
+  idusuario           Int?
+  idcategoria         Int?
+  fecha               DateTime?         @db.DateTime(0)
+  titulo              String?           @db.VarChar(100)
+  resumen             String?           @db.VarChar(255)
+  vistas              Int?              @default(0)
+  estado              String?           @default("0") @db.Char(1)
+  link_foto_principal String?           @db.VarChar(255)
+  content             String?           @db.LongText
+  link_id             String?           @db.VarChar(100)
+  tags                String?           @db.VarChar(100)  
+  usuario             usuario?          @relation(fields: [idusuario], references: [idusuario], onDelete: Restrict, onUpdate: Restrict, map: "publicacion_FK")
+  categoria           categoria?        @relation(fields: [idcategoria], references: [idcategoria], onDelete: Restrict, onUpdate: Restrict, map: "publicacion_FK_1")
+  publicacion_tag     publicacion_tag[]
+  
+  @@index([idusuario], map: "publicacion_FK")
+  @@index([idcategoria], map: "publicacion_FK_1")
+  @@index([tags], map: "publicacion_tags_IDX")
+  @@fulltext([tags])
+}
+
+model usuario {
+  idusuario   Int           @id @default(autoincrement())
+  nombre      String?       @db.VarChar(100)
+  nick        String?       @db.VarChar(15)
+  pass        String?       @db.VarChar(100)
+  estado      String?       @default("0") @db.Char(1)
+  publicacion publicacion[]
+}
+
+model tag {
+  id              Int               @id @default(autoincrement())
+  descripcion     String?           @db.VarChar(100)
+  estado          String            @default("0") @db.Char(1)
+  publicacion_tag publicacion_tag[]
+}
+
+model publicacion_tag {
+  idpublicacion_tag Int         @id @default(autoincrement())
+  idpublicacion     Int
+  idtag             Int
+  publicacion       publicacion @relation(fields: [idpublicacion], references: [idpublicacion], onUpdate: Restrict, map: "publicacion_tag_FK")
+  tag               tag         @relation(fields: [idtag], references: [id], onUpdate: Restrict, map: "publicacion_tag_FK_1")
+
+  @@index([idpublicacion], map: "publicacion_tag_FK")
+  @@index([idtag], map: "publicacion_tag_FK_1")
+}

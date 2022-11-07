@@ -11,7 +11,7 @@ import { loginOne } from "../controllers/usuario";
 const router = express.Router();
 
 router.get('/', function (req, res) {
-    res.status(200).json({ message: 'Estás conectado a nuestra API' })
+    res.status(200).json({ message: 'Estás conectado a nuestra API port: 30000' })
 });
 
 router.use('/login', loginOne);

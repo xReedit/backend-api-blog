@@ -11,7 +11,7 @@ const router = express.Router();
 
 export async function login(_usuario: any) {
     try {
-        const usuario = await prisma.usuario.findFirst({ where: { nick: _usuario.nick } });
+        const usuario = <any>await prisma.usuario.findFirst({ where: { nick: _usuario.nick } });
 
         if ( !usuario ) {
             throw new Error("Usuario o Clave incorrectos");

@@ -9,7 +9,7 @@ router.get('/', function (req, res) {
 });
 
 // create
-router.post('/create', async (req, res) => {
+router.post('/create', async (req: any, res) => {
     const _data = {...req.body, fecha: new Date(), idusuario: req['token'].id}        
     const rpt = await prisma.publicacion.createMany({
         data: _data
@@ -53,7 +53,7 @@ router.get('/all', async (req, res) => {
         where: { estado: '0' }
     });
 
-    rpt.map(x => {delete x.usuario['pass']; return x});
+    rpt.map((x: any) => {delete x.usuario['pass']; return x});
     res.status(200).send(rpt);
     prisma.$disconnect();
 })
@@ -67,7 +67,7 @@ router.get('/byId/:id', async(req, res) => {
         include: { usuario: true, categoria: true }
     })
 
-    rpt.map(x => {delete x.usuario['pass']; return x});
+    rpt.map((x: any) => {delete x.usuario['pass']; return x});
     res.status(200).send(rpt);
     prisma.$disconnect();
 })

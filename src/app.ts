@@ -1,9 +1,9 @@
 // create crud orm prisma
-import * as express from "express";
-import * as cors from "cors";
+import express from "express";
+import cors from "cors";
 // import * as bodyParser from 'body-parser';
 
-import routes from "./src/routes";
+import routes from "./routes";
 
 const app = express();
 

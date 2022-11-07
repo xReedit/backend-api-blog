@@ -87,7 +87,7 @@ router.get('/all', async (req, res) => {
         where: { estado: '0' }
     });
 
-    rpt.map(x => {delete x['pass']; return x});
+    rpt.map((x: any) => {delete x['pass']; return x});
     res.status(200).send(rpt);
     prisma.$disconnect();
 })
@@ -101,7 +101,7 @@ router.get('/byId/:id', async(req, res) => {
         }        
     })
     
-    rpt.map(x => {delete x['pass']; return x});
+    rpt.map((x: any) => {delete x['pass']; return x});
     res.status(200).send(rpt);
     prisma.$disconnect();
 })

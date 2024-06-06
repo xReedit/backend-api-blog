@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -27,15 +27,14 @@ model publicacion {
   link_foto_principal String?           @db.VarChar(255)
   content             String?           @db.LongText
   link_id             String?           @db.VarChar(100)
-  tags                String?           @db.VarChar(100)  
+  tags                String?           @db.VarChar(100)
   usuario             usuario?          @relation(fields: [idusuario], references: [idusuario], onDelete: Restrict, onUpdate: Restrict, map: "publicacion_FK")
   categoria           categoria?        @relation(fields: [idcategoria], references: [idcategoria], onDelete: Restrict, onUpdate: Restrict, map: "publicacion_FK_1")
   publicacion_tag     publicacion_tag[]
-  
+
   @@index([idusuario], map: "publicacion_FK")
   @@index([idcategoria], map: "publicacion_FK_1")
   @@index([tags], map: "publicacion_tags_IDX")
-  @@fulltext([tags])
 }
 
 model usuario {
@@ -63,4 +62,14 @@ model publicacion_tag {
 
   @@index([idpublicacion], map: "publicacion_tag_FK")
   @@index([idtag], map: "publicacion_tag_FK_1")
+}
+
+model changelog {
+  id          Int      @id @default(autoincrement())
+  titulo      String   @db.VarChar(30)
+  descripcion String   @db.VarChar(200)
+  body        String   @db.LongText
+  estado      String   @default("0") @db.Char(1)
+  route       String   @db.Char(10)
+  fecha       DateTime @db.Date
 }
